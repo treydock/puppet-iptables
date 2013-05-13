@@ -4,11 +4,6 @@ Wrapper for the puppetlabs-firewall module.
 
 Also defines the 'pre' and 'post' firewall rules as documented by [puppetlabs-firewall](https://github.com/puppetlabs/puppetlabs-firewall)
 
-## Dependencies
-
-* Ruby 1.8.7
-* Bundler
-
 ## Usage
 
 The following should be added to site.pp
