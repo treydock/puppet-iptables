@@ -4,11 +4,11 @@ class iptables::pre {
   }
 
   # Default firewall rules
-  exec { 'blank_iptables_start':
-    path    => '/usr/bin:/usr/sbin:/bin',
-    unless  => '/sbin/service iptables status',
-    command => '/sbin/iptables -L',
-  }->
+#  exec { 'blank_iptables_start':
+#    path    => '/usr/bin:/usr/sbin:/bin',
+#    unless  => '/sbin/service iptables status',
+#    command => '/sbin/iptables -L',
+#  }->
   firewall { '000 accept all icmp':
     proto   => 'icmp',
     action  => 'accept',
