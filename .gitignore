@@ -2,6 +2,7 @@
 .vagrant
 .ruby-version
 .rvmrc
+.project
 Gemfile.lock
 metadata.json
 spec/fixtures/modules
