@@ -7,6 +7,7 @@ describe 'iptables::rule' do
     {
       :osfamily                 => 'RedHat',
       :operatingsystemrelease   => '6.4',
+      :kernel                   => 'Linux',
     }
   end
 

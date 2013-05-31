@@ -24,6 +24,7 @@
 class iptables (
   $rules        = false
 ) {
+
   class { ['iptables::pre', 'iptables::post']: }
 
   # Allow parameters from ENC or Hiera to define individual firewall rules

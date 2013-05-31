@@ -12,9 +12,13 @@
 # Copyright 2012 Trey Dockendorf, unless otherwise noted.
 #
 class iptables::post {
-  firewall { '999 drop all':
-    proto   => 'all',
-    action  => 'drop',
-    before  => undef,
+  include firewall
+
+  unless $firewall::ensure =~ /stopped/ {
+    firewall { '999 drop all':
+      proto   => 'all',
+      action  => 'drop',
+      before  => undef,
+    }
   }
 }

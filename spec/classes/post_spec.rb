@@ -1,12 +1,13 @@
 require 'spec_helper'
 
 
-describe 'iptables' do
+describe 'iptables::post' do
 
   let :facts do
     {
       :osfamily                 => 'RedHat',
       :operatingsystemrelease   => '6.4',
+      :kernel                   => 'Linux',
     }
   end
 

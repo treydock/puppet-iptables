@@ -38,9 +38,9 @@ Apply this module:
 1. Have Vagrant >= 1.2.0 installed
 2. Run tests using `bundle exec rake spec:system`
 
-For active development the `DESTROY=no` environment variable can be passed to keep the Vagrant VM from being destroyed after a test run.
+For active development the `RSPEC_DESTROY=no` environment variable can be passed to keep the Vagrant VM from being destroyed after a test run.
 
-    DESTROY=no bundle exec rake spec:system
+    RSPEC_DESTROY=no bundle exec rake spec:system
 
 
 ## TODO
