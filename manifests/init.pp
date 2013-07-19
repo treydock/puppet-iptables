@@ -22,14 +22,19 @@
 # Copyright 2012 Trey Dockendorf, unless otherwise noted.
 #
 class iptables (
+  $ensure       = running,
   $rules        = $iptables::params::rules
 ) inherits iptables::params {
+
+  class { 'firewall': ensure  => $ensure }
 
   if $rules {
     validate_hash($rules)
   }
 
-  class { ['iptables::pre', 'iptables::post']: }
+  #class { ['iptables::pre', 'iptables::post']: }
+  include iptables::pre
+  include iptables::post
 
   if $rules and !empty($rules) { create_resources('iptables::rule', $rules) }
 }

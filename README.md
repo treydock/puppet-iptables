@@ -19,6 +19,13 @@ The following should be added to site.pp
 Apply this module:
 
     class { 'iptables': }
+    
+
+Disable iptables
+
+    class { 'iptables':
+      ensure  => stopped,
+    }
 
 ## Development
 
@@ -26,22 +33,22 @@ Apply this module:
 
 * Ruby 1.8.7
 * Bundler
-* Vagrant >= 1.2.0
 
-### Unit testing
+### Unit tests
 
-1. To install dependencies run `bundle install`
-2. Run tests using `bundle exec rake spec:all`
+Install gem dependencies
 
-### Vagrant system tests
+    bundle install
 
-1. Have Vagrant >= 1.2.0 installed
-2. Run tests using `bundle exec rake spec:system`
+Run tests
 
-For active development the `RSPEC_DESTROY=no` environment variable can be passed to keep the Vagrant VM from being destroyed after a test run.
+    bundle exec rake ci
 
-    RSPEC_DESTROY=no bundle exec rake spec:system
+### System tests
 
+If you have Vagrant >= 1.1.0 installed you can run system tests.
+
+    bundle exec rake spec:system
 
 ## TODO
 

@@ -1,5 +1,5 @@
 name 'treydock-iptables'
-version '0.1.0'
+version '0.2.0'
 
 author 'treydock'
 license 'Apache License, Version 2.0'

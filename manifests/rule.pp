@@ -24,6 +24,8 @@ define iptables::rule (
   $outiface     = undef
 ) {
 
+  include iptables
+
   $port_real = $port ? {
     'UNSET' => is_integer($name) ? {
       true    => $name,
@@ -38,14 +40,15 @@ define iptables::rule (
     $firewall_name  = "100 open port ${port_real} for ${name}"
   }
 
-  firewall { $firewall_name:
-    ensure      => $ensure,
-    action      => $action,
-    port        => $port_real,
-    proto       => $proto,
-    chain       => $chain,
-    iniface     => $iniface,
-    outiface    => $outiface,
+  if $iptables::ensure =~ /running/ {
+    firewall { $firewall_name:
+      ensure      => $ensure,
+      action      => $action,
+      port        => $port_real,
+      proto       => $proto,
+      chain       => $chain,
+      iniface     => $iniface,
+      outiface    => $outiface,
+    }
   }
-
 }

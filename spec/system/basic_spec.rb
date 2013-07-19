@@ -8,7 +8,6 @@ describe 'iptables class:' do
 
   context 'should run successfully' do
     pp = <<-EOS
-      class { 'firewall': }
       class { 'iptables': }
     EOS
 
@@ -21,10 +20,9 @@ describe 'iptables class:' do
     end
   end
  
-  context 'with param firewall ensure => stopped:' do
+  context 'with param ensure => stopped:' do
     pp = <<-EOS
-      class { 'firewall': ensure => 'stopped' }
-      class { 'iptables': }
+      class { 'iptables': ensure => 'stopped' }
     EOS
 
     context puppet_apply(pp) do

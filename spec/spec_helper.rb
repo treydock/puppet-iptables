@@ -1,6 +1,7 @@
 require 'puppetlabs_spec_helper/module_spec_helper'
 
-shared_context :firewall_defaults do
+shared_context :defaults do
+=begin
   let :pre_condition do
     'resources { "firewall":
       purge => true
@@ -10,9 +11,7 @@ shared_context :firewall_defaults do
       require => Class["iptables::pre"],
     }'
   end
-end
-
-shared_context :defaults do
+=end
   let :default_facts do
     {
       :osfamily                 => 'RedHat',

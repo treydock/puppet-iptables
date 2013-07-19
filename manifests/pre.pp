@@ -12,13 +12,13 @@
 # Copyright 2012 Trey Dockendorf, unless otherwise noted.
 #
 class iptables::pre {
-  include firewall
+  include iptables
 
   Firewall {
     require => undef,
   }
 
-  unless $firewall::ensure =~ /stopped/ {
+  if $iptables::ensure =~ /running/ {
     firewall { '000 accept all icmp':
       proto   => 'icmp',
       action  => 'accept',

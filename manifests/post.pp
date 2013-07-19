@@ -12,9 +12,9 @@
 # Copyright 2012 Trey Dockendorf, unless otherwise noted.
 #
 class iptables::post {
-  include firewall
+  include iptables
 
-  unless $firewall::ensure =~ /stopped/ {
+  if $iptables::ensure =~ /running/ {
     firewall { '999 drop all':
       proto   => 'all',
       action  => 'drop',
