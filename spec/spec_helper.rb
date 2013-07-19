@@ -11,3 +11,13 @@ shared_context :firewall_defaults do
     }'
   end
 end
+
+shared_context :defaults do
+  let :default_facts do
+    {
+      :osfamily                 => 'RedHat',
+      :operatingsystemrelease   => '6.4',
+      :kernel                   => 'Linux',
+    }
+  end
+end

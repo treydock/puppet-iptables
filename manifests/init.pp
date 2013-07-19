@@ -22,20 +22,14 @@
 # Copyright 2012 Trey Dockendorf, unless otherwise noted.
 #
 class iptables (
-  $rules        = false
-) {
+  $rules        = $iptables::params::rules
+) inherits iptables::params {
+
+  if $rules {
+    validate_hash($rules)
+  }
 
   class { ['iptables::pre', 'iptables::post']: }
 
-  # Allow parameters from ENC or Hiera to define individual firewall rules
-  # ENC value takes presedence over Hiera
-#  if $::iptables_rules {
-#    $iptables_rules = string2hash($::iptables_rules)
-#  } elsif hiera('iptables_rules', false) {
-#    $iptables_rules = hiera('iptables_rules')
-#  } else {
-#    $iptables_rules = false
-#  }
-
-  if $rules { create_resources('iptables::rule', $rules) }
+  if $rules and !empty($rules) { create_resources('iptables::rule', $rules) }
 }

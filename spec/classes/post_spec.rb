@@ -2,14 +2,9 @@ require 'spec_helper'
 
 
 describe 'iptables::post' do
+  include_context :defaults
 
-  let :facts do
-    {
-      :osfamily                 => 'RedHat',
-      :operatingsystemrelease   => '6.4',
-      :kernel                   => 'Linux',
-    }
-  end
+  let(:facts) { default_facts }
 
   it do
     should contain_firewall('999 drop all').with({

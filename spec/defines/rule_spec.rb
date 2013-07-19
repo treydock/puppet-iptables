@@ -2,14 +2,9 @@ require 'spec_helper'
 
 
 describe 'iptables::rule' do
+  include_context :defaults
 
-  let :facts do
-    {
-      :osfamily                 => 'RedHat',
-      :operatingsystemrelease   => '6.4',
-      :kernel                   => 'Linux',
-    }
-  end
+  let(:facts) { default_facts }
 
   let(:title) { '80' }
   
