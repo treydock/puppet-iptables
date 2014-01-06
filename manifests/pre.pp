@@ -14,11 +14,11 @@
 class iptables::pre {
   include iptables
 
-  Firewall {
-    require => undef,
-  }
-
   if $iptables::ensure =~ /running/ {
+    Firewall {
+      require => undef,
+    }
+
     firewall { '000 accept all icmp':
       proto   => 'icmp',
       action  => 'accept',

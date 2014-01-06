@@ -6,6 +6,8 @@ describe 'iptables::pre' do
 
   let(:facts) { default_facts }
 
+  let(:pre_condition) { "class { 'iptables': }" }
+
   it do
     should contain_firewall('000 accept all icmp').with({
       'proto'   => 'icmp',
@@ -44,5 +46,14 @@ describe 'iptables::pre' do
       'before'  => 'Class[Iptables::Post]',
       'require' => nil,
     })
+  end
+
+  context "when firewall::ensure => stopped" do
+    let(:pre_condition) {["class { 'firewall': ensure => stopped }", "class { 'iptables': }" ]}
+
+    it { should_not contain_firewall('000 accept all icmp') }
+    it { should_not contain_firewall('001 accept all to lo interface') }
+    it { should_not contain_firewall('002 accept related established rules') }
+    it { should_not contain_firewall('003 accept new ssh') }
   end
 end

@@ -7,7 +7,9 @@ describe 'iptables::rule' do
   let(:facts) { default_facts }
 
   let(:title) { '80' }
-  
+
+  let(:pre_condition) { "class { 'iptables': }" }
+
   it do
     should contain_firewall("100 open port 80").with({
       'ensure'  => 'present',
@@ -21,13 +23,9 @@ describe 'iptables::rule' do
   end
 
   context 'with port => 443' do
-    let :params do
-      { :port => '443' }
-    end
+    let(:params) {{ :port => '443' }}
 
-    let :title do
-      'https'
-    end
+    let(:title) { 'https' }
 
     it do
       should contain_firewall("100 open port 443 for https").with({

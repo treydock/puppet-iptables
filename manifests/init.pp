@@ -5,6 +5,10 @@
 #
 # === Parameters:
 #
+# [*purge_unmanaged_rules*]
+#   Boolean.  Determines if unmanaged firewall rules are purged.
+#   Default: true
+#
 # [*rules*]
 #   Hash defining simple Firewall instances to be passed to
 #   the Iptables::Rule defined resource.
@@ -22,17 +26,26 @@
 # Copyright 2012 Trey Dockendorf, unless otherwise noted.
 #
 class iptables (
-  $ensure       = running,
-  $rules        = $iptables::params::rules
+  $purge_unmanaged_rules = true,
+  $rules = $iptables::params::rules
 ) inherits iptables::params {
 
-  class { 'firewall': ensure  => $ensure }
+  validate_bool($purge_unmanaged_rules)
+
+  include firewall
+
+  $ensure = $firewall::ensure
+
+  if $ensure =~ /running/ {
+    resources { 'firewall':
+      purge => $purge_unmanaged_rules,
+    }
+  }
 
   if $rules {
     validate_hash($rules)
   }
 
-  #class { ['iptables::pre', 'iptables::post']: }
   include iptables::pre
   include iptables::post
 

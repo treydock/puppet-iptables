@@ -4,27 +4,32 @@ Wrapper for the puppetlabs-firewall module.
 
 Also defines the 'pre' and 'post' firewall rules as documented by [puppetlabs-firewall](https://github.com/puppetlabs/puppetlabs-firewall)
 
-## Usage
+## Setup
 
-The following should be added to site.pp
+The following must be added to **site.pp**
 
-    resources { "firewall":
-      purge => true
-    }
     Firewall {
       before  => Class['iptables::post'],
       require => Class['iptables::pre'],
     }
 
+## Usage
+
 Apply this module:
 
+    class { 'firewall': }
     class { 'iptables': }
-    
 
-Disable iptables
+Disable iptables:
 
+    class { 'firewall': ensure => stopped }
+    class { 'iptables': }
+
+Add an iptables rule for HTTPS port 443:
+
+    class { 'firewall': }
     class { 'iptables':
-      ensure  => stopped,
+      rules => {'https' => {'port' => '443'}},
     }
 
 ## Development
