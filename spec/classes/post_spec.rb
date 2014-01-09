@@ -12,7 +12,7 @@ describe 'iptables::post' do
     should contain_firewall('999 drop all').with({
       'proto'   => 'all',
       'action'  => 'drop',
-      'before'  => nil,
+      'before'  => 'Resources[firewall]',
       'require' => 'Class[Iptables::Pre]',
     })
   end
