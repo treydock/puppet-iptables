@@ -37,8 +37,18 @@ describe 'iptables' do
     it { expect { should create_class('iptables') }.to raise_error(Puppet::Error, /is not a Hash/) }
   end
 
+  context "when manage => false" do
+    let(:params) {{ :manage => false }}
+
+    it { should_not contain_class('firewall') }
+    it { should_not contain_class('iptables::pre') }
+    it { should_not contain_class('iptables::post') }
+    it { should_not contain_resources('firewall') }
+  end
+
   # Test verify_boolean parameters
   [
+    'manage',
     'purge_unmanaged_rules',
   ].each do |param|
     context "with #{param} => 'foo'" do

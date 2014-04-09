@@ -26,28 +26,34 @@
 # Copyright 2012 Trey Dockendorf, unless otherwise noted.
 #
 class iptables (
+  $manage = true,
   $purge_unmanaged_rules = true,
   $rules = $iptables::params::rules
 ) inherits iptables::params {
 
-  validate_bool($purge_unmanaged_rules)
+  validate_bool($manage)
 
-  include firewall
+  if $manage {
+    validate_bool($purge_unmanaged_rules)
 
-  $ensure = $firewall::ensure
+    include firewall
 
-  if $ensure =~ /running/ {
-    resources { 'firewall':
-      purge => $purge_unmanaged_rules,
+    $ensure = $firewall::ensure
+
+    if $ensure =~ /running/ {
+      resources { 'firewall':
+        purge => $purge_unmanaged_rules,
+      }
     }
+
+    if $rules {
+      validate_hash($rules)
+    }
+
+    include iptables::pre
+    include iptables::post
+
+    if $rules and !empty($rules) { create_resources('iptables::rule', $rules) }
   }
 
-  if $rules {
-    validate_hash($rules)
-  }
-
-  include iptables::pre
-  include iptables::post
-
-  if $rules and !empty($rules) { create_resources('iptables::rule', $rules) }
 }
