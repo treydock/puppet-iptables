@@ -8,7 +8,7 @@ describe 'iptables::rule' do
 
   let(:title) { '80' }
 
-  let(:pre_condition) { "class { 'iptables': }" }
+  it { should create_iptables__rule('80') }
 
   it do
     should contain_firewall("100 open port 80").with({
@@ -26,6 +26,8 @@ describe 'iptables::rule' do
     let(:params) {{ :port => '443' }}
 
     let(:title) { 'https' }
+
+    it { should create_iptables__rule('https') }
 
     it do
       should contain_firewall("100 open port 443 for https").with({

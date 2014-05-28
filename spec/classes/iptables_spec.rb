@@ -7,6 +7,7 @@ describe 'iptables' do
   let(:facts) { default_facts }
 
   it { should create_class('iptables') }
+  it { should contain_class('iptables::params') }
   it { should contain_class('firewall') }
   it { should contain_class('iptables::pre') }
   it { should contain_class('iptables::post') }
@@ -23,12 +24,14 @@ describe 'iptables' do
     let(:params) {{ :rules => {'80' => {}} }}
 
     it { should contain_iptables__rule('80') }
+    it { should contain_firewall('100 open port 80') }
   end
 
   context "with rules => {'http' => {'port' => '80'}}" do
     let(:params) {{ :rules => {'http' => {'port' => '80'}} }}
 
     it { should contain_iptables__rule('http').with_port('80') }
+    it { should contain_firewall('100 open port 80 for http') }
   end
 
   context "with rules => 'foo'" do
