@@ -6,7 +6,7 @@ define iptables::forward (
   $iniface,
 ) {
 
-  firewall { "100 FORWARD ${iniface} to ${name}":
+  firewall { "100 FORWARD ${name} to ${iniface}":
     chain     => 'FORWARD',
     action    => 'accept',
     proto     => 'all',

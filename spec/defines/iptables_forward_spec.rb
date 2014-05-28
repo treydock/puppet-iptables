@@ -13,7 +13,7 @@ describe 'iptables::forward' do
   it { should create_iptables__forward('eth0') }
 
   it do
-    should contain_firewall("100 FORWARD eth2 to eth0").with({
+    should contain_firewall("100 FORWARD eth0 to eth2").with({
       :chain     => 'FORWARD',
       :action    => 'accept',
       :proto     => 'all',
