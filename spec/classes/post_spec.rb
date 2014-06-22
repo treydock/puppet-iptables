@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 describe 'iptables::post' do
   include_context :defaults
 
@@ -10,10 +9,10 @@ describe 'iptables::post' do
 
   it do
     should contain_firewall('999 drop all').with({
-      'proto'   => 'all',
-      'action'  => 'drop',
-      'before'  => 'Resources[firewall]',
-      'require' => 'Class[Iptables::Pre]',
+      :proto   => 'all',
+      :action  => 'drop',
+      :before  => 'Resources[firewall]',
+      :require => 'Class[Iptables::Pre]',
     })
   end
 

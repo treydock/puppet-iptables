@@ -1,4 +1,4 @@
-require 'spec_helper_system'
+require 'spec_helper_acceptance'
 
 describe 'iptables class:' do
   context 'with default parameters' do
@@ -8,11 +8,8 @@ describe 'iptables class:' do
         class { 'iptables': }
       EOS
 
-      puppet_apply(pp) do |r|
-       r.exit_code.should_not == 1
-       r.refresh
-       r.exit_code.should be_zero
-      end
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
     end
 
     describe service('iptables') do
@@ -20,7 +17,7 @@ describe 'iptables class:' do
       it { should be_running }
     end
   end
- 
+
   context 'with param ensure => stopped:' do
     it "should stop iptables" do
       pp = <<-EOS
@@ -28,11 +25,8 @@ describe 'iptables class:' do
         class { 'iptables': }
       EOS
 
-      puppet_apply(pp) do |r|
-       r.exit_code.should_not == 1
-       r.refresh
-       r.exit_code.should be_zero
-      end
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
     end
 
     describe service('iptables') do

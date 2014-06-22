@@ -10,7 +10,7 @@ shared_context :defaults do
       :kernel                 => 'Linux',
       :osfamily               => 'RedHat',
       :operatingsystem        => 'CentOS',
-      :operatingsystemrelease => '6.4',
+      :operatingsystemrelease => '6.5',
       :architecture           => 'x86_64',
     }
   end

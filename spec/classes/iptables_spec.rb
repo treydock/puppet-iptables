@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 describe 'iptables' do
   include_context :defaults
 

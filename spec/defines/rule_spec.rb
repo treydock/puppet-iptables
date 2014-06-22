@@ -6,38 +6,38 @@ describe 'iptables::rule' do
 
   let(:facts) { default_facts }
 
-  let(:title) { '80' }
+  let(:title) { '8080' }
 
-  it { should create_iptables__rule('80') }
+  it { should create_iptables__rule('8080') }
 
   it do
-    should contain_firewall("100 open port 80").with({
-      'ensure'  => 'present',
-      'action'  => 'accept',
-      'port'    => '80',
-      'chain'   => 'INPUT',
-      'proto'   => 'tcp',
-      'before'  => 'Class[Iptables::Post]',
-      'require' => 'Class[Iptables::Pre]',
+    should contain_firewall("100 open port 8080").with({
+      :ensure  => 'present',
+      :action  => 'accept',
+      :port    => '8080',
+      :chain   => 'INPUT',
+      :proto   => 'tcp',
+      :before  => 'Class[Iptables::Post]',
+      :require => 'Class[Iptables::Pre]',
     })
   end
 
-  context 'with port => 443' do
-    let(:params) {{ :port => '443' }}
+  context 'with port => 8080' do
+    let(:params) {{ :port => '8080' }}
 
-    let(:title) { 'https' }
+    let(:title) { 'http alternate' }
 
-    it { should create_iptables__rule('https') }
+    it { should create_iptables__rule('http alternate') }
 
     it do
-      should contain_firewall("100 open port 443 for https").with({
-        'ensure'  => 'present',
-        'action'  => 'accept',
-        'port'    => '443',
-        'chain'   => 'INPUT',
-        'proto'   => 'tcp',
-        'before'  => 'Class[Iptables::Post]',
-        'require' => 'Class[Iptables::Pre]',
+      should contain_firewall("100 open port 8080 for http alternate").with({
+        :ensure  => 'present',
+        :action  => 'accept',
+        :port    => '8080',
+        :chain   => 'INPUT',
+        :proto   => 'tcp',
+        :before  => 'Class[Iptables::Post]',
+        :require => 'Class[Iptables::Pre]',
       })
     end
   end

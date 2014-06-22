@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 describe 'iptables::nat' do
   include_context :defaults
 
