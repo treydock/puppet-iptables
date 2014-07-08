@@ -41,4 +41,24 @@ describe 'iptables::rule' do
       })
     end
   end
+
+  context 'with port => 50000-51000' do
+    let(:params) {{ :port => '50000-51000' }}
+
+    let(:title) { 'GridFTP' }
+
+    it { should create_iptables__rule('GridFTP') }
+
+    it do
+      should contain_firewall("100 open port 50000-51000 for GridFTP").with({
+        :ensure  => 'present',
+        :action  => 'accept',
+        :port    => '50000-51000',
+        :chain   => 'INPUT',
+        :proto   => 'tcp',
+        :before  => 'Class[Iptables::Post]',
+        :require => 'Class[Iptables::Pre]',
+      })
+    end
+  end
 end

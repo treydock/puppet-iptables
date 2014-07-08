@@ -1,12 +1,12 @@
-# == Class: iptables::forward
+# == Define: iptables::forward
 #
-# Sets the nat POSTROUTING rule
+# Defines a FORWARD rule for interfaces
 #
 define iptables::forward (
   $iniface,
 ) {
 
-  firewall { "100 FORWARD ${name} to ${iniface}":
+  firewall { "001 FORWARD ${name} to ${iniface}":
     chain     => 'FORWARD',
     action    => 'accept',
     proto     => 'all',
