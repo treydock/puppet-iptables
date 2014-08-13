@@ -18,7 +18,6 @@ describe 'iptables::forward' do
   it { should create_iptables__forward('private') }
 
   it do
-    pp catalogue.resource('firewall', '000 FORWARD related established private').send(:parameters)
     should contain_firewall('000 FORWARD related established private').only_with({
       :ensure   => 'present',
       :name     => '000 FORWARD related established private',

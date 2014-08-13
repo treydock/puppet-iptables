@@ -9,6 +9,7 @@ define iptables::forward::rule (
   $dport = undef,
   $source = undef,
   $destination = 'UNSET',
+  $dst_range = undef,
 ) {
 
   validate_string($order)
@@ -18,9 +19,12 @@ define iptables::forward::rule (
     fail("iptables::forward::rule: order parameter must be numeric but ${order} was given.")
   }
 
-  $destination_real = $destination ? {
-    'UNSET' => $name,
-    default => $destination,
+  if $destination == 'UNSET' and ! $dst_range {
+    $destination_real = $name
+  } elsif $destination == 'UNSET' and $dst_range {
+    $destination_real = undef
+  } else {
+    $destination_real = $destination
   }
 
   firewall { "${order} FORWARD allow ${name}":
@@ -30,6 +34,7 @@ define iptables::forward::rule (
     dport       => $dport,
     source      => $source,
     destination => $destination_real,
+    dst_range   => $dst_range,
   }
 
 }

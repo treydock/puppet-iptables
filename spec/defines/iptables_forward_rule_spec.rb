@@ -15,9 +15,9 @@ describe 'iptables::forward::rule' do
       :chain        => 'FORWARD',
       :action       => 'accept',
       :proto        => 'all',
-      :dport        => nil,
-      :source       => nil,
       :destination  => 'rubygems.org',
+      :before       => 'Class[Iptables::Post]',
+      :require      => 'Class[Iptables::Pre]',
     })
   end
 
@@ -38,9 +38,28 @@ describe 'iptables::forward::rule' do
         :chain        => 'FORWARD',
         :action       => 'accept',
         :proto        => 'all',
-        :dport        => nil,
-        :source       => nil,
         :destination  => '10.1.0.0/16',
+        :before       => 'Class[Iptables::Post]',
+        :require      => 'Class[Iptables::Pre]',
+      })
+    end
+  end
+
+  context 'when dst_range defined' do
+    let(:title) { 'foo.com' }
+    let(:params) {{ :dst_range => '10.1.0.1-10.1.0.10' }}
+
+    it { should create_iptables__forward__rule('foo.com') }
+
+    it do
+      should contain_firewall('100 FORWARD allow foo.com').only_with({
+        :name         => '100 FORWARD allow foo.com',
+        :chain        => 'FORWARD',
+        :action       => 'accept',
+        :proto        => 'all',
+        :dst_range    => '10.1.0.1-10.1.0.10',
+        :before       => 'Class[Iptables::Post]',
+        :require      => 'Class[Iptables::Pre]',
       })
     end
   end
