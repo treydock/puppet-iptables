@@ -15,7 +15,7 @@ define iptables::forward::rule (
   validate_slength($order, 3, 3)
 
   if ! is_numeric($order) {
-    fail("iptables::forward::accept: order parameter must be numeric but ${order} was given.")
+    fail("iptables::forward::rule: order parameter must be numeric but ${order} was given.")
   }
 
   $destination_real = $destination ? {
