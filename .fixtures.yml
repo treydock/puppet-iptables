@@ -2,10 +2,10 @@ fixtures:
   repositories:
     stdlib:
       repo: git://github.com/puppetlabs/puppetlabs-stdlib.git
-      ref: 4.2.0
+      ref: 4.3.2
     firewall:
       repo: git://github.com/puppetlabs/puppetlabs-firewall.git
-      ref: 1.1.1
+      ref: 1.1.3
     augeasproviders:
       repo: git://github.com/hercules-team/augeasproviders.git
       ref: v1.2.0

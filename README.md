@@ -47,13 +47,13 @@ Install gem dependencies
 
 Run tests
 
-    bundle exec rake ci
+    bundle exec rake test
 
 ### System tests
 
 If you have Vagrant >= 1.1.0 installed you can run system tests.
 
-    bundle exec rake spec:system
+    bundle exec rake beaker
 
 ## TODO
 
