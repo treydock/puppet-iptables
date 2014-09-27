@@ -28,10 +28,26 @@
 class iptables (
   $manage = true,
   $purge_unmanaged_rules = true,
+  $deny_action = 'drop',
   $rules = $iptables::params::rules
 ) inherits iptables::params {
 
   validate_bool($manage)
+  validate_re($deny_action, ['^drop$', '^reject$'])
+
+  case $deny_action {
+    'drop': {
+      $post_rules_action = 'drop'
+      $post_rules_reject = undef
+    }
+    'reject': {
+      $post_rules_action = 'reject'
+      $post_rules_reject = 'icmp-host-prohibited'
+    }
+    default: {
+      fail("Module ${module_name}: deny_action parameter must be drop or reject, ${deny_action} given.")
+    }
+  }
 
   if $manage {
     validate_bool($purge_unmanaged_rules)

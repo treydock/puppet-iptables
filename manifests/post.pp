@@ -15,10 +15,19 @@ class iptables::post {
   include iptables
 
   if $iptables::ensure =~ /running/ {
-    firewall { '999 drop all':
+    firewall { '999 deny all':
       proto   => 'all',
-      action  => 'drop',
-      before  => Resources['firewall'],
+      action  => $iptables::post_rules_action,
+      reject  => $iptables::post_rules_reject,
+      before  => undef,
+    }
+
+    firewall { '999 deny all FORWARD':
+      proto   => 'all',
+      action  => $iptables::post_rules_action,
+      reject  => $iptables::post_rules_reject,
+      chain   => 'FORWARD',
+      before  => undef,
     }
   }
 }
