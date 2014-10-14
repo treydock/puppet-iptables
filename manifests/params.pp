@@ -26,10 +26,5 @@ class iptables::params {
     }
   }
 
-  $rules = $::iptables_rules ? {
-    undef   => false,
-    default => $::iptables_rules,
-  }
-
 }
 

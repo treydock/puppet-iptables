@@ -29,11 +29,12 @@ class iptables (
   $manage = true,
   $purge_unmanaged_rules = true,
   $deny_action = 'drop',
-  $rules = $iptables::params::rules
+  $rules = {},
 ) inherits iptables::params {
 
   validate_bool($manage)
   validate_re($deny_action, ['^drop$', '^reject$'])
+  validate_hash($rules)
 
   case $deny_action {
     'drop': {
@@ -57,19 +58,11 @@ class iptables (
     $ensure = $firewall::ensure
 
     if $ensure =~ /running/ {
-      resources { 'firewall':
-        purge => $purge_unmanaged_rules,
-      }
+      class { ['iptables::pre', 'iptables::post']: }->
+      resources { 'firewall': purge => $purge_unmanaged_rules }
     }
 
-    if $rules {
-      validate_hash($rules)
-    }
-
-    include iptables::pre
-    include iptables::post
-
-    if $rules and !empty($rules) { create_resources('iptables::rule', $rules) }
+    create_resources('iptables::rule', $rules)
   }
 
 }
