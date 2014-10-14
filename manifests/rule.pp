@@ -42,13 +42,13 @@ define iptables::rule (
 
   if $iptables::ensure =~ /running/ {
     firewall { $firewall_name:
-      ensure      => $ensure,
-      action      => $action,
-      port        => $port_real,
-      proto       => $proto,
-      chain       => $chain,
-      iniface     => $iniface,
-      outiface    => $outiface,
+      ensure   => $ensure,
+      action   => $action,
+      port     => $port_real,
+      proto    => $proto,
+      chain    => $chain,
+      iniface  => $iniface,
+      outiface => $outiface,
     }
   }
 }

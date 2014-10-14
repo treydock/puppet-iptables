@@ -16,18 +16,18 @@ class iptables::post {
 
   if $iptables::ensure =~ /running/ {
     firewall { '999 deny all':
-      proto   => 'all',
-      action  => $iptables::post_rules_action,
-      reject  => $iptables::post_rules_reject,
-      before  => undef,
+      proto  => 'all',
+      action => $iptables::post_rules_action,
+      reject => $iptables::post_rules_reject,
+      before => undef,
     }
 
     firewall { '999 deny all FORWARD':
-      proto   => 'all',
-      action  => $iptables::post_rules_action,
-      reject  => $iptables::post_rules_reject,
-      chain   => 'FORWARD',
-      before  => undef,
+      proto  => 'all',
+      action => $iptables::post_rules_action,
+      reject => $iptables::post_rules_reject,
+      chain  => 'FORWARD',
+      before => undef,
     }
   }
 }

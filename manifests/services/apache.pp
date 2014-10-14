@@ -23,19 +23,19 @@ class iptables::services::apache (
   include iptables
 
   firewall { '100 allow http':
-    ensure  => $http_ensure,
-    chain   => $chain,
-    port    => $http_port,
-    proto   => 'tcp',
-    action  => $http_action,
+    ensure => $http_ensure,
+    chain  => $chain,
+    port   => $http_port,
+    proto  => 'tcp',
+    action => $http_action,
   }
 
   firewall { '100 allow https':
-    ensure  => $https_ensure,
-    chain   => $chain,
-    port    => $https_port,
-    proto   => 'tcp',
-    action  => $https_action,
+    ensure => $https_ensure,
+    chain  => $chain,
+    port   => $https_port,
+    proto  => 'tcp',
+    action => $https_action,
   }
 
 }

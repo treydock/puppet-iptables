@@ -25,22 +25,22 @@ define iptables::forward (
   }
 
   firewall { "000 FORWARD related established ${name}":
-    ensure    => $ensure_established,
-    chain     => 'FORWARD',
-    action    => 'accept',
-    proto     => 'all',
-    state     => ['RELATED', 'ESTABLISHED'],
-    iniface   => $external,
-    outiface  => $internal,
+    ensure   => $ensure_established,
+    chain    => 'FORWARD',
+    action   => 'accept',
+    proto    => 'all',
+    state    => ['RELATED', 'ESTABLISHED'],
+    iniface  => $external,
+    outiface => $internal,
   }
 
   firewall { "001 FORWARD all ${name}":
-    ensure    => $ensure_all,
-    chain     => 'FORWARD',
-    action    => 'accept',
-    proto     => 'all',
-    iniface   => $internal,
-    outiface  => $external,
+    ensure   => $ensure_all,
+    chain    => 'FORWARD',
+    action   => 'accept',
+    proto    => 'all',
+    iniface  => $internal,
+    outiface => $external,
   }
 
 }
