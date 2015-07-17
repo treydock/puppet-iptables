@@ -14,6 +14,129 @@ describe 'iptables' do
 
   it { should contain_resources('firewall').with_purge('true') }
 
+  it do
+    should contain_service('ip6tables').with({
+      :ensure => 'running',
+      :enable => 'true',
+    })
+  end
+
+  describe 'iptables::pre' do
+    it do
+      should contain_firewall('000 accept all icmp').with({
+        :proto   => 'icmp',
+        :action  => 'accept',
+        :before  => 'Firewall[001 accept all to lo interface]',
+        :require => nil,
+      })
+    end
+
+    it do
+      should contain_firewall('001 accept all to lo interface').with({
+        :proto   => 'all',
+        :iniface => 'lo',
+        :action  => 'accept',
+        :before  => 'Firewall[002 accept related established rules]',
+        :require => nil,
+      })
+    end
+
+    it do
+      should contain_firewall('002 accept related established rules').with({
+        :proto   => 'all',
+        :state   => ['RELATED', 'ESTABLISHED'],
+        :action  => 'accept',
+        :before  => 'Firewall[003 accept new ssh]',
+        :require => nil,
+      })
+    end
+
+    it do
+      should contain_firewall('003 accept new ssh').with({
+        :proto   => 'tcp',
+        :state   => ['NEW'],
+        :action  => 'accept',
+        :dport   => '22',
+        :before  => 'Class[Iptables::Post]',
+        :require => nil,
+      })
+    end
+
+    context "when firewall::ensure => stopped" do
+      let(:pre_condition) { "class { 'firewall': ensure => stopped }" }
+
+      it { should_not contain_firewall('000 accept all icmp') }
+      it { should_not contain_firewall('001 accept all to lo interface') }
+      it { should_not contain_firewall('002 accept related established rules') }
+      it { should_not contain_firewall('003 accept new ssh') }
+    end
+  end
+
+  describe 'iptables::post' do
+    it do
+      should contain_firewall('999 deny all').with({
+        :proto   => 'all',
+        :action  => 'drop',
+        :reject  => nil,
+        :before  => nil,
+        :require => 'Class[Iptables::Pre]',
+      })
+    end
+
+    it do
+      should contain_firewall('999 deny all FORWARD').with({
+        :proto   => 'all',
+        :action  => 'drop',
+        :reject  => nil,
+        :chain   => 'FORWARD',
+        :before  => nil,
+        :require => 'Class[Iptables::Pre]',
+      })
+    end
+
+    context "when firewall::ensure => stopped" do
+      let(:pre_condition) { "class { 'firewall': ensure => stopped }" }
+
+      it { should_not contain_firewall('999 drop all') }
+    end
+
+    context 'when iptables::deny_action => "reject"' do
+      let(:params) {{ :deny_action => 'reject' }}
+
+      it do
+        should contain_firewall('999 deny all').with({
+          :proto   => 'all',
+          :action  => 'reject',
+          :reject  => 'icmp-host-prohibited',
+          :before  => nil,
+          :require => 'Class[Iptables::Pre]',
+        })
+      end
+
+      it do
+        should contain_firewall('999 deny all FORWARD').with({
+          :proto   => 'all',
+          :action  => 'reject',
+          :reject  => 'icmp-host-prohibited',
+          :chain   => 'FORWARD',
+          :before  => nil,
+          :require => 'Class[Iptables::Pre]',
+        })
+      end
+    end
+  end
+
+  context "when firewall::ensure => stopped" do
+    let(:pre_condition) { "class { 'firewall': ensure => stopped }" }
+
+    it do
+      should contain_service('ip6tables').with({
+        :ensure => 'stopped',
+        :enable => 'false',
+      })
+    end
+  end
+
   context "with purge_unmanaged_rules => false" do
     let(:params) {{ :purge_unmanaged_rules => false }}
 

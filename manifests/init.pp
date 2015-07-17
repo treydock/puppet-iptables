@@ -33,7 +33,6 @@ class iptables (
 ) inherits iptables::params {
 
   validate_bool($manage)
-  validate_re($deny_action, ['^drop$', '^reject$'])
   validate_hash($rules)
 
   case $deny_action {
@@ -55,20 +54,20 @@ class iptables (
 
     include firewall
 
-    $ensure = $firewall::ensure
-    $enable = $firewall::ensure ? {
+    $_ensure = $firewall::ensure
+    $_enable = $firewall::ensure ? {
       'running' => true,
       'stopped' => false,
     }
 
-    if $ensure =~ /running/ {
+    if $firewall::ensure == 'running' {
       class { ['iptables::pre', 'iptables::post']: }->
       resources { 'firewall': purge => $purge_unmanaged_rules }
     }
 
     service { 'ip6tables':
-      ensure  => $ensure,
-      enable  => $enable,
+      ensure  => $_ensure,
+      enable  => $_enable,
       require => Package[$firewall::package_name],
     }
 
