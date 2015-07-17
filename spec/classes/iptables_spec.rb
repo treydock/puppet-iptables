@@ -5,6 +5,7 @@ describe 'iptables' do
 
   let(:facts) { default_facts }
 
+  it { should compile.with_all_deps }
   it { should create_class('iptables') }
   it { should contain_class('iptables::params') }
   it { should contain_class('firewall') }

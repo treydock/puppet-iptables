@@ -56,10 +56,20 @@ class iptables (
     include firewall
 
     $ensure = $firewall::ensure
+    $enable = $firewall::ensure ? {
+      'running' => true,
+      'stopped' => false,
+    }
 
     if $ensure =~ /running/ {
       class { ['iptables::pre', 'iptables::post']: }->
       resources { 'firewall': purge => $purge_unmanaged_rules }
+    }
+
+    service { 'ip6tables':
+      ensure  => $ensure,
+      enable  => $enable,
+      require => Package[$firewall::package_name],
     }
 
     create_resources('iptables::rule', $rules)
