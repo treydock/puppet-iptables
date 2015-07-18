@@ -40,7 +40,7 @@ define iptables::rule (
     $firewall_name  = "100 open port ${port_real} for ${name}"
   }
 
-  if $iptables::ensure =~ /running/ {
+  if $iptables::_ensure == 'running' {
     firewall { $firewall_name:
       ensure   => $ensure,
       action   => $action,
