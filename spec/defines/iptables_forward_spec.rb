@@ -27,8 +27,8 @@ describe 'iptables::forward' do
       :state    => ['RELATED', 'ESTABLISHED'],
       :iniface  => 'eth1',
       :outiface => 'eth0',
-      :before   => 'Class[Iptables::Post]',
-      :require  => 'Class[Iptables::Pre]',
+      :before   => ['Class[Iptables::Post]'],
+      :require  => ['Class[Iptables::Pre]'],
     })
   end
 
@@ -41,8 +41,8 @@ describe 'iptables::forward' do
       :proto    => 'all',
       :iniface  => 'eth0',
       :outiface => 'eth1',
-      :before   => 'Class[Iptables::Post]',
-      :require  => 'Class[Iptables::Pre]',
+      :before   => ['Class[Iptables::Post]'],
+      :require  => ['Class[Iptables::Pre]'],
     })
   end
 

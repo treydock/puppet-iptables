@@ -18,8 +18,8 @@ describe 'iptables::services::apache' do
       :port     => '80',
       :proto    => 'tcp',
       :action   => 'accept',
-      :before   => 'Class[Iptables::Post]',
-      :require  => 'Class[Iptables::Pre]',
+      :before   => ['Class[Iptables::Post]'],
+      :require  => ['Class[Iptables::Pre]'],
     })
   end
 
@@ -31,8 +31,8 @@ describe 'iptables::services::apache' do
       :port     => '443',
       :proto    => 'tcp',
       :action   => 'accept',
-      :before   => 'Class[Iptables::Post]',
-      :require  => 'Class[Iptables::Pre]',
+      :before   => ['Class[Iptables::Post]'],
+      :require  => ['Class[Iptables::Pre]'],
     })
   end
 end

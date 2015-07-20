@@ -16,8 +16,8 @@ describe 'iptables::forward::rule' do
       :action       => 'accept',
       :proto        => 'all',
       :destination  => 'rubygems.org',
-      :before       => 'Class[Iptables::Post]',
-      :require      => 'Class[Iptables::Pre]',
+      :before       => ['Class[Iptables::Post]'],
+      :require      => ['Class[Iptables::Pre]'],
     })
   end
 
@@ -39,8 +39,8 @@ describe 'iptables::forward::rule' do
         :action       => 'accept',
         :proto        => 'all',
         :destination  => '10.1.0.0/16',
-        :before       => 'Class[Iptables::Post]',
-        :require      => 'Class[Iptables::Pre]',
+        :before       => ['Class[Iptables::Post]'],
+        :require      => ['Class[Iptables::Pre]'],
       })
     end
   end
@@ -58,8 +58,8 @@ describe 'iptables::forward::rule' do
         :action       => 'accept',
         :proto        => 'all',
         :dst_range    => '10.1.0.1-10.1.0.10',
-        :before       => 'Class[Iptables::Post]',
-        :require      => 'Class[Iptables::Pre]',
+        :before       => ['Class[Iptables::Post]'],
+        :require      => ['Class[Iptables::Pre]'],
       })
     end
   end

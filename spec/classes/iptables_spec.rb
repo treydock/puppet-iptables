@@ -26,7 +26,7 @@ describe 'iptables' do
       should contain_firewall('000 accept all icmp').with({
         :proto   => 'icmp',
         :action  => 'accept',
-        :before  => 'Firewall[001 accept all to lo interface]',
+        :before  => ['Firewall[001 accept all to lo interface]'],
         :require => nil,
       })
     end
@@ -36,7 +36,7 @@ describe 'iptables' do
         :proto   => 'all',
         :iniface => 'lo',
         :action  => 'accept',
-        :before  => 'Firewall[002 accept related established rules]',
+        :before  => ['Firewall[002 accept related established rules]'],
         :require => nil,
       })
     end
@@ -46,7 +46,7 @@ describe 'iptables' do
         :proto   => 'all',
         :state   => ['RELATED', 'ESTABLISHED'],
         :action  => 'accept',
-        :before  => 'Firewall[003 accept new ssh]',
+        :before  => ['Firewall[003 accept new ssh]'],
         :require => nil,
       })
     end
@@ -57,7 +57,7 @@ describe 'iptables' do
         :state   => ['NEW'],
         :action  => 'accept',
         :dport   => '22',
-        :before  => 'Class[Iptables::Post]',
+        :before  => ['Class[Iptables::Post]'],
         :require => nil,
       })
     end
@@ -67,7 +67,7 @@ describe 'iptables' do
         :proto    => 'ipv6-icmp',
         :action   => 'accept',
         :provider => 'ip6tables',
-        :before   => 'Firewall[001 accept all to lo interface - ipv6]',
+        :before   => ['Firewall[001 accept all to lo interface - ipv6]'],
         :require  => nil,
       })
     end
@@ -78,7 +78,7 @@ describe 'iptables' do
         :iniface  => 'lo',
         :action   => 'accept',
         :provider => 'ip6tables',
-        :before   => 'Firewall[002 accept related established rules - ipv6]',
+        :before   => ['Firewall[002 accept related established rules - ipv6]'],
         :require  => nil,
       })
     end
@@ -89,7 +89,7 @@ describe 'iptables' do
         :state    => ['RELATED', 'ESTABLISHED'],
         :action   => 'accept',
         :provider => 'ip6tables',
-        :before   => 'Class[Iptables::Post]',
+        :before   => ['Class[Iptables::Post]'],
         :require  => nil,
       })
     end
@@ -114,7 +114,7 @@ describe 'iptables' do
         :action  => 'drop',
         :reject  => nil,
         :before  => nil,
-        :require => 'Class[Iptables::Pre]',
+        :require => ['Class[Iptables::Pre]'],
       })
     end
 
@@ -125,7 +125,7 @@ describe 'iptables' do
         :reject  => nil,
         :chain   => 'FORWARD',
         :before  => nil,
-        :require => 'Class[Iptables::Pre]',
+        :require => ['Class[Iptables::Pre]'],
       })
     end
 
@@ -136,7 +136,7 @@ describe 'iptables' do
         :reject   => nil,
         :provider => 'ip6tables',
         :before   => nil,
-        :require  => 'Class[Iptables::Pre]',
+        :require  => ['Class[Iptables::Pre]'],
       })
     end
 
@@ -148,7 +148,7 @@ describe 'iptables' do
         :chain    => 'FORWARD',
         :provider => 'ip6tables',
         :before   => nil,
-        :require  => 'Class[Iptables::Pre]',
+        :require  => ['Class[Iptables::Pre]'],
       })
     end
 
@@ -170,7 +170,7 @@ describe 'iptables' do
           :action  => 'reject',
           :reject  => 'icmp-host-prohibited',
           :before  => nil,
-          :require => 'Class[Iptables::Pre]',
+          :require => ['Class[Iptables::Pre]'],
         })
       end
 
@@ -181,7 +181,7 @@ describe 'iptables' do
           :reject  => 'icmp-host-prohibited',
           :chain   => 'FORWARD',
           :before  => nil,
-          :require => 'Class[Iptables::Pre]',
+          :require => ['Class[Iptables::Pre]'],
         })
       end
 
@@ -192,7 +192,7 @@ describe 'iptables' do
           :reject   => 'icmp6-adm-prohibited',
           :provider => 'ip6tables',
           :before   => nil,
-          :require  => 'Class[Iptables::Pre]',
+          :require  => ['Class[Iptables::Pre]'],
         })
       end
 
@@ -204,7 +204,7 @@ describe 'iptables' do
           :chain    => 'FORWARD',
           :provider => 'ip6tables',
           :before   => nil,
-          :require  => 'Class[Iptables::Pre]',
+          :require  => ['Class[Iptables::Pre]'],
         })
       end
     end
