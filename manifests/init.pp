@@ -37,12 +37,14 @@ class iptables (
 
   case $deny_action {
     'drop': {
-      $post_rules_action = 'drop'
-      $post_rules_reject = undef
+      $post_rules_action      = 'drop'
+      $post_rules_reject      = undef
+      $post_rules_ipv6_reject = undef
     }
     'reject': {
-      $post_rules_action = 'reject'
-      $post_rules_reject = 'icmp-host-prohibited'
+      $post_rules_action      = 'reject'
+      $post_rules_reject      = 'icmp-host-prohibited'
+      $post_rules_ipv6_reject = 'icmp6-adm-prohibited'
     }
     default: {
       fail("Module ${module_name}: deny_action parameter must be drop or reject, ${deny_action} given.")

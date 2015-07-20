@@ -29,4 +29,21 @@ class iptables::post {
     before => undef,
   }
 
+  firewall { '999 deny all - ipv6':
+    proto    => 'all',
+    action   => $iptables::post_rules_action,
+    reject   => $iptables::post_rules_ipv6_reject,
+    provider => 'ip6tables',
+    before   => undef,
+  }
+
+  firewall { '999 deny all FORWARD - ipv6':
+    proto    => 'all',
+    action   => $iptables::post_rules_action,
+    reject   => $iptables::post_rules_ipv6_reject,
+    chain    => 'FORWARD',
+    provider => 'ip6tables',
+    before   => undef,
+  }
+
 }

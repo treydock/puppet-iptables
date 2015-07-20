@@ -39,4 +39,22 @@ class iptables::pre {
     dport  => '22',
   }
 
+  firewall { '000 accept all ipv6-icmp':
+    proto    => 'ipv6-icmp',
+    action   => 'accept',
+    provider => 'ip6tables',
+  }->
+  firewall { '001 accept all to lo interface - ipv6':
+    proto    => 'all',
+    iniface  => 'lo',
+    action   => 'accept',
+    provider => 'ip6tables',
+  }->
+  firewall { '002 accept related established rules - ipv6':
+    proto    => 'all',
+    state    => ['RELATED', 'ESTABLISHED'],
+    action   => 'accept',
+    provider => 'ip6tables',
+  }
+
 }
