@@ -5,6 +5,7 @@ describe 'iptables::rule' do
   include_context :defaults
 
   let(:facts) { default_facts }
+  let(:pre_condition) { "Firewall { before  => Class['iptables::post'], require => Class['iptables::pre'] }" }
 
   let(:title) { '8080' }
 
@@ -17,8 +18,8 @@ describe 'iptables::rule' do
       :port    => '8080',
       :chain   => 'INPUT',
       :proto   => 'tcp',
-      :before  => ['Class[Iptables::Post]'],
-      :require => ['Class[Iptables::Pre]'],
+      :before  => 'Class[Iptables::Post]',
+      :require => 'Class[Iptables::Pre]',
     })
   end
 
@@ -36,8 +37,8 @@ describe 'iptables::rule' do
         :port    => '8080',
         :chain   => 'INPUT',
         :proto   => 'tcp',
-        :before  => ['Class[Iptables::Post]'],
-        :require => ['Class[Iptables::Pre]'],
+        :before  => 'Class[Iptables::Post]',
+        :require => 'Class[Iptables::Pre]',
       })
     end
   end
@@ -56,8 +57,8 @@ describe 'iptables::rule' do
         :port    => '50000-51000',
         :chain   => 'INPUT',
         :proto   => 'tcp',
-        :before  => ['Class[Iptables::Post]'],
-        :require => ['Class[Iptables::Pre]'],
+        :before  => 'Class[Iptables::Post]',
+        :require => 'Class[Iptables::Pre]',
       })
     end
   end

@@ -1,12 +1,12 @@
 require 'spec_helper_acceptance'
 
-describe 'iptables::apache class:' do
+describe 'iptables::services::apache class:' do
   context 'with default parameters' do
     it "should run successfully" do
       pp = <<-EOS
         class { 'firewall': }
         class { 'iptables': }
-        class { 'iptables::apache': }
+        class { 'iptables::services::apache': }
       EOS
 
       apply_manifest(pp, :catch_failures => true)

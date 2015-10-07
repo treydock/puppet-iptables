@@ -4,6 +4,7 @@ describe 'iptables::services::apache' do
   include_context :defaults
 
   let(:facts) { default_facts }
+  let(:pre_condition) { "Firewall { before  => Class['iptables::post'], require => Class['iptables::pre'] }" }
 
   let(:params) {{}}
 
@@ -18,8 +19,8 @@ describe 'iptables::services::apache' do
       :port     => '80',
       :proto    => 'tcp',
       :action   => 'accept',
-      :before   => ['Class[Iptables::Post]'],
-      :require  => ['Class[Iptables::Pre]'],
+      :before   => 'Class[Iptables::Post]',
+      :require  => 'Class[Iptables::Pre]',
     })
   end
 
@@ -31,8 +32,8 @@ describe 'iptables::services::apache' do
       :port     => '443',
       :proto    => 'tcp',
       :action   => 'accept',
-      :before   => ['Class[Iptables::Post]'],
-      :require  => ['Class[Iptables::Pre]'],
+      :before   => 'Class[Iptables::Post]',
+      :require  => 'Class[Iptables::Pre]',
     })
   end
 end
