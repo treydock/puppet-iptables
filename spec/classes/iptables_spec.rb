@@ -4,6 +4,7 @@ describe 'iptables' do
   include_context :defaults
 
   let(:facts) { default_facts }
+  let(:pre_condition) { "Firewall { before  => Class['iptables::post'], require => Class['iptables::pre'] }" }
 
   it { should compile.with_all_deps }
   it { should create_class('iptables') }
@@ -57,7 +58,7 @@ describe 'iptables' do
         :state   => ['NEW'],
         :action  => 'accept',
         :dport   => '22',
-        :before  => ['Class[Iptables::Post]'],
+        :before  => 'Class[Iptables::Post]',
         :require => nil,
       })
     end
@@ -89,7 +90,7 @@ describe 'iptables' do
         :state    => ['RELATED', 'ESTABLISHED'],
         :action   => 'accept',
         :provider => 'ip6tables',
-        :before   => ['Class[Iptables::Post]'],
+        :before   => 'Class[Iptables::Post]',
         :require  => nil,
       })
     end
@@ -114,7 +115,7 @@ describe 'iptables' do
         :action  => 'drop',
         :reject  => nil,
         :before  => nil,
-        :require => ['Class[Iptables::Pre]'],
+        :require => 'Class[Iptables::Pre]',
       })
     end
 
@@ -125,7 +126,7 @@ describe 'iptables' do
         :reject  => nil,
         :chain   => 'FORWARD',
         :before  => nil,
-        :require => ['Class[Iptables::Pre]'],
+        :require => 'Class[Iptables::Pre]',
       })
     end
 
@@ -136,7 +137,7 @@ describe 'iptables' do
         :reject   => nil,
         :provider => 'ip6tables',
         :before   => nil,
-        :require  => ['Class[Iptables::Pre]'],
+        :require  => 'Class[Iptables::Pre]',
       })
     end
 
@@ -148,7 +149,7 @@ describe 'iptables' do
         :chain    => 'FORWARD',
         :provider => 'ip6tables',
         :before   => nil,
-        :require  => ['Class[Iptables::Pre]'],
+        :require  => 'Class[Iptables::Pre]',
       })
     end
 
@@ -170,7 +171,7 @@ describe 'iptables' do
           :action  => 'reject',
           :reject  => 'icmp-host-prohibited',
           :before  => nil,
-          :require => ['Class[Iptables::Pre]'],
+          :require => 'Class[Iptables::Pre]',
         })
       end
 
@@ -181,7 +182,7 @@ describe 'iptables' do
           :reject  => 'icmp-host-prohibited',
           :chain   => 'FORWARD',
           :before  => nil,
-          :require => ['Class[Iptables::Pre]'],
+          :require => 'Class[Iptables::Pre]',
         })
       end
 
@@ -192,7 +193,7 @@ describe 'iptables' do
           :reject   => 'icmp6-adm-prohibited',
           :provider => 'ip6tables',
           :before   => nil,
-          :require  => ['Class[Iptables::Pre]'],
+          :require  => 'Class[Iptables::Pre]',
         })
       end
 
@@ -204,7 +205,7 @@ describe 'iptables' do
           :chain    => 'FORWARD',
           :provider => 'ip6tables',
           :before   => nil,
-          :require  => ['Class[Iptables::Pre]'],
+          :require  => 'Class[Iptables::Pre]',
         })
       end
     end

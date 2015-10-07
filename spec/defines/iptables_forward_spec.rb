@@ -5,6 +5,7 @@ describe 'iptables::forward' do
   include_context :defaults
 
   let(:facts) { default_facts }
+  let(:pre_condition) { "Firewall { before  => Class['iptables::post'], require => Class['iptables::pre'] }" }
 
   let(:title) { 'private' }
 
@@ -27,8 +28,8 @@ describe 'iptables::forward' do
       :state    => ['RELATED', 'ESTABLISHED'],
       :iniface  => 'eth1',
       :outiface => 'eth0',
-      :before   => ['Class[Iptables::Post]'],
-      :require  => ['Class[Iptables::Pre]'],
+      :before   => 'Class[Iptables::Post]',
+      :require  => 'Class[Iptables::Pre]',
     })
   end
 
@@ -41,8 +42,8 @@ describe 'iptables::forward' do
       :proto    => 'all',
       :iniface  => 'eth0',
       :outiface => 'eth1',
-      :before   => ['Class[Iptables::Post]'],
-      :require  => ['Class[Iptables::Pre]'],
+      :before   => 'Class[Iptables::Post]',
+      :require  => 'Class[Iptables::Pre]',
     })
   end
 
