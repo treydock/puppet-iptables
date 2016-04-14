@@ -28,6 +28,12 @@
 class iptables (
   $manage = true,
   $purge_unmanaged_rules = true,
+  $purge_input_chain = undef,
+  $purge_forward_chain = undef,
+  $purge_output_chain = undef,
+  $input_chain_ignore = undef,
+  $forward_chain_ignore = undef,
+  $output_chain_ignore = undef,
   $deny_action = 'drop',
   $rules = {},
 ) inherits iptables::params {
@@ -51,6 +57,10 @@ class iptables (
     }
   }
 
+  $_purge_input_chain = pick($purge_input_chain, $purge_unmanaged_rules)
+  $_purge_forward_chain = pick($purge_forward_chain, $purge_unmanaged_rules)
+  $_purge_output_chain = pick($purge_output_chain, $purge_unmanaged_rules)
+
   if $manage {
     validate_bool($purge_unmanaged_rules)
 
@@ -63,8 +73,20 @@ class iptables (
     }
 
     if $firewall::ensure == 'running' {
-      class { ['iptables::pre', 'iptables::post']: }->
-      resources { 'firewall': purge => $purge_unmanaged_rules }
+      class { ['iptables::pre', 'iptables::post']: }
+      firewallchain { 'INPUT:filter:IPv4':
+        purge  => $_purge_input_chain,
+        ignore => $input_chain_ignore,
+      }
+      firewallchain { 'FORWARD:filter:IPv4':
+        purge  => $_purge_forward_chain,
+        ignore => $forward_chain_ignore,
+      }
+      firewallchain { 'OUTPUT:filter:IPv4':
+        purge  => $_purge_output_chain,
+        ignore => $output_chain_ignore,
+      }
+      #resources { 'firewall': purge => $purge_unmanaged_rules }
     }
 
     service { 'ip6tables':
