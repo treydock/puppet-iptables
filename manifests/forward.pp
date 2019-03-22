@@ -5,12 +5,9 @@
 define iptables::forward (
   $internal,
   $external,
-  $allow_established = true,
-  $allow_all = true,
+  Boolean $allow_established = true,
+  Boolean $allow_all = true,
 ) {
-
-  validate_bool($allow_established)
-  validate_bool($allow_all)
 
   if $allow_established {
     $ensure_established = 'present'
@@ -24,7 +21,7 @@ define iptables::forward (
     $ensure_all = 'absent'
   }
 
-  firewall { "000 FORWARD related established ${name}":
+  firewall { "100 FORWARD related established ${name}":
     ensure   => $ensure_established,
     chain    => 'FORWARD',
     action   => 'accept',
@@ -34,7 +31,7 @@ define iptables::forward (
     outiface => $internal,
   }
 
-  firewall { "001 FORWARD all ${name}":
+  firewall { "101 FORWARD all ${name}":
     ensure   => $ensure_all,
     chain    => 'FORWARD',
     action   => 'accept',

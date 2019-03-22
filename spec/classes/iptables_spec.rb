@@ -17,41 +17,42 @@ describe 'iptables' do
 
   it do
     should contain_service('ip6tables').with({
-      :ensure => 'running',
-      :enable => 'true',
+      :ensure => 'stopped',
+      :enable => 'false',
     })
   end
 
   describe 'iptables::pre' do
     it do
-      should contain_firewall('000 accept all icmp').with({
+      should contain_firewall('00001 accept all icmp').with({
         :proto   => 'icmp',
         :action  => 'accept',
-        :before  => ['Firewall[001 accept all to lo interface]'],
+        :before  => ['Firewall[00001 loopback]'],
         :require => nil,
       })
     end
 
     it do
-      should contain_firewall('001 accept all to lo interface').with({
+      should contain_firewall('00001 loopback').with({
         :proto   => 'all',
         :iniface => 'lo',
         :action  => 'accept',
-        :before  => ['Firewall[002 accept related established rules]'],
+        :before  => ['Firewall[00001 allow locally initiated inbound traffic]'],
         :require => nil,
       })
     end
 
     it do
-      should contain_firewall('002 accept related established rules').with({
+      should contain_firewall('00001 allow locally initiated inbound traffic').with({
         :proto   => 'all',
         :state   => ['RELATED', 'ESTABLISHED'],
         :action  => 'accept',
-        :before  => ['Firewall[003 accept new ssh]'],
+        :before  => 'Class[Iptables::Post]',
         :require => nil,
       })
     end
 
+=begin
     it do
       should contain_firewall('003 accept new ssh').with({
         :proto   => 'tcp',
@@ -68,24 +69,24 @@ describe 'iptables' do
         :proto    => 'ipv6-icmp',
         :action   => 'accept',
         :provider => 'ip6tables',
-        :before   => ['Firewall[001 accept all to lo interface - ipv6]'],
+        :before   => ['Firewall[001 loopback - ipv6]'],
         :require  => nil,
       })
     end
 
     it do
-      should contain_firewall('001 accept all to lo interface - ipv6').with({
+      should contain_firewall('001 loopback - ipv6').with({
         :proto    => 'all',
         :iniface  => 'lo',
         :action   => 'accept',
         :provider => 'ip6tables',
-        :before   => ['Firewall[002 accept related established rules - ipv6]'],
+        :before   => ['Firewall[002 allow locally initiated inbound traffic - ipv6]'],
         :require  => nil,
       })
     end
 
     it do
-      should contain_firewall('002 accept related established rules - ipv6').with({
+      should contain_firewall('002 allow locally initiated inbound traffic - ipv6').with({
         :proto    => 'all',
         :state    => ['RELATED', 'ESTABLISHED'],
         :action   => 'accept',
@@ -94,23 +95,23 @@ describe 'iptables' do
         :require  => nil,
       })
     end
-
+=end
     context "when firewall::ensure => stopped" do
       let(:pre_condition) { "class { 'firewall': ensure => stopped }" }
 
-      it { should_not contain_firewall('000 accept all icmp') }
-      it { should_not contain_firewall('001 accept all to lo interface') }
-      it { should_not contain_firewall('002 accept related established rules') }
-      it { should_not contain_firewall('003 accept new ssh') }
-      it { should_not contain_firewall('000 accept all ipv6-icmp') }
-      it { should_not contain_firewall('001 accept all to lo interface - ipv6') }
-      it { should_not contain_firewall('002 accept related established rules - ipv6') }
+      it { should_not contain_firewall('00001 accept all icmp') }
+      it { should_not contain_firewall('00001 loopback') }
+      it { should_not contain_firewall('00001 allow locally initiated inbound traffic') }
+      #it { should_not contain_firewall('003 accept new ssh') }
+      #it { should_not contain_firewall('000 accept all ipv6-icmp') }
+      #it { should_not contain_firewall('001 loopback - ipv6') }
+      #it { should_not contain_firewall('002 allow locally initiated inbound traffic - ipv6') }
     end
   end
 
   describe 'iptables::post' do
     it do
-      should contain_firewall('999 deny all').with({
+      should contain_firewall('99999 deny all').with({
         :proto   => 'all',
         :action  => 'drop',
         :reject  => nil,
@@ -120,7 +121,7 @@ describe 'iptables' do
     end
 
     it do
-      should contain_firewall('999 deny all FORWARD').with({
+      should contain_firewall('99999 deny all FORWARD').with({
         :proto   => 'all',
         :action  => 'drop',
         :reject  => nil,
@@ -129,9 +130,9 @@ describe 'iptables' do
         :require => 'Class[Iptables::Pre]',
       })
     end
-
+=begin
     it do
-      should contain_firewall('999 deny all - ipv6').with({
+      should contain_firewall('99999 deny all - ipv6').with({
         :proto    => 'all',
         :action   => 'drop',
         :reject   => nil,
@@ -152,21 +153,21 @@ describe 'iptables' do
         :require  => 'Class[Iptables::Pre]',
       })
     end
-
+=end
     context "when firewall::ensure => stopped" do
       let(:pre_condition) { "class { 'firewall': ensure => stopped }" }
 
-      it { should_not contain_firewall('999 drop all') }
-      it { should_not contain_firewall('999 deny all FORWARD') }
-      it { should_not contain_firewall('999 deny all - ipv6') }
-      it { should_not contain_firewall('999 deny all FORWARD - ipv6') }
+      it { should_not contain_firewall('99999 drop all') }
+      it { should_not contain_firewall('99999 deny all FORWARD') }
+      #it { should_not contain_firewall('999 deny all - ipv6') }
+      #it { should_not contain_firewall('999 deny all FORWARD - ipv6') }
     end
 
     context 'when iptables::deny_action => "reject"' do
       let(:params) {{ :deny_action => 'reject' }}
 
       it do
-        should contain_firewall('999 deny all').with({
+        should contain_firewall('99999 deny all').with({
           :proto   => 'all',
           :action  => 'reject',
           :reject  => 'icmp-host-prohibited',
@@ -176,7 +177,7 @@ describe 'iptables' do
       end
 
       it do
-        should contain_firewall('999 deny all FORWARD').with({
+        should contain_firewall('99999 deny all FORWARD').with({
           :proto   => 'all',
           :action  => 'reject',
           :reject  => 'icmp-host-prohibited',
@@ -185,7 +186,7 @@ describe 'iptables' do
           :require => 'Class[Iptables::Pre]',
         })
       end
-
+=begin
       it do
         should contain_firewall('999 deny all - ipv6').with({
           :proto    => 'all',
@@ -208,6 +209,7 @@ describe 'iptables' do
           :require  => 'Class[Iptables::Pre]',
         })
       end
+=end
     end
   end
 
@@ -227,7 +229,7 @@ describe 'iptables' do
 
     it { should contain_resources('firewall').with_purge('false') }
   end
-
+=begin
   context "with rules => {'80' => {}}" do
     let(:params) {{ :rules => {'80' => {}} }}
 
@@ -247,7 +249,7 @@ describe 'iptables' do
 
     it { expect { should create_class('iptables') }.to raise_error(Puppet::Error, /is not a Hash/) }
   end
-
+=end
   context "when manage => false" do
     let(:params) {{ :manage => false }}
 
