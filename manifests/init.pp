@@ -136,13 +136,6 @@ class iptables (
       # Unnecessary even if purging unmanaged chains
       #Resources['firewallchain'] -> Service['ip6tables']
     }
-
-    service { 'ip6tables':
-      ensure  => 'stopped',
-      enable  => false,
-      require => Package[$firewall::package_name],
-    }
-
   }
 
 }
